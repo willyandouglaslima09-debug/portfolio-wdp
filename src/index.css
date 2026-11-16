@@ -1,0 +1,57 @@
+@import "tailwindcss";
+
+:root {
+  --accent-lime: #CAFA65;
+  --dark-primary: #101722;
+  --dark-deep: #090D14;
+  --dark-surface: #141D29;
+  --dark-border: #25313F;
+  --dark-muted: #34404D;
+  --light-primary: #F0F1EC;
+  --light-surface: #E3E6DE;
+  --light-border: #CBD0C8;
+  --text-secondary-dark: #A6AFBC;
+  --text-caption-dark: #B9C1C7;
+  --text-secondary-light: #53606A;
+}
+
+html {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  scroll-behavior: smooth;
+  background-color: #101722;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}
+
+body {
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+  margin: 0;
+  padding: 0;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+
+.editorial-body {
+  font-size: clamp(1rem, 1.2vw, 1.375rem);
+}
+
+.figma-grid-card {
+  background-color: #141D29;
+  background-image:
+    linear-gradient(to right, rgba(37, 49, 63, 0.58) 1px, transparent 1px),
+    linear-gradient(to bottom, rgba(37, 49, 63, 0.58) 1px, transparent 1px);
+  background-size: 20% 33.333%;
+}
+
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+
+.no-scrollbar {
+     -ms-overflow-style: none;
+     scrollbar-width: none;
+   }
