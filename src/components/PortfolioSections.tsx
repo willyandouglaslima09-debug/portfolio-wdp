@@ -3,9 +3,8 @@ import { motion } from 'framer-motion';
 import {
   ArrowRight,
   BookOpen,
-  CheckCircle2,
   Compass,
-  Disc,
+  FileText,
   Filter,
   Music,
   Sparkles,
@@ -14,13 +13,16 @@ import {
 import type {
   EncounterData,
   ParodyThemeId,
+  SecondaryMediaConfig,
+  SectionTheme,
   UploadedMedia,
 } from '../types/portfolio';
 import {
+  INTRO_CLASS_MEDIA_SLOT,
   OVERVIEW_ENCOUNTERS,
   OVERVIEW_OBJECTIVES,
   PARODY_FILTERS,
-  STUDENT_PROFILE,
+  PARODY_FULL_LYRICS,
   SYNTHESIS_CARDS,
 } from '../data/portfolioData';
 import { MediaSlotCard } from './MediaSlotCard';
@@ -31,15 +33,59 @@ import {
   staggerItemVariants,
 } from './MotionPrimitives';
 
+function buildVirtualEncounter(
+  slot: SecondaryMediaConfig,
+  code: string,
+  number: string,
+  theme: SectionTheme,
+  kicker: string,
+  dateBadge: string
+): EncounterData {
+  return {
+    id: slot.id,
+    code,
+    number,
+    theme,
+    kicker,
+    dateBadge,
+    visualDate: slot.headerTag,
+    title: slot.placeholderTitle,
+    subtitle: slot.caption,
+    classroomHappened: '',
+    personalNotes: '',
+    visualPlaceholderTitle: slot.placeholderTitle,
+    visualCaption: slot.caption,
+    visualSubCaption: slot.subCaption,
+    takeaway: '',
+  };
+}
+
 interface CourseOverviewSectionProps {
+  mediaMap: Record<string, UploadedMedia>;
+  onUpload: (slotId: string, file: File) => void;
+  onRemove: (slotId: string, silent?: boolean) => void;
+  onOpenLightbox: (encounter: EncounterData) => void;
   onNavigate: (targetId: string) => void;
   isPresentationMode: boolean;
 }
 
 export const CourseOverviewSection: React.FC<CourseOverviewSectionProps> = ({
+  mediaMap,
+  onUpload,
+  onRemove,
+  onOpenLightbox,
   onNavigate,
   isPresentationMode,
 }) => {
+  const introEncounterSlot = buildVirtualEncounter(
+    INTRO_CLASS_MEDIA_SLOT,
+    'WDP / 02',
+    '00',
+    'light',
+    '05/07 · AULA INTRODUTÓRIA',
+    '05 DE JULHO · 2026'
+  );
+
   return (
     <section
       id="wdp-02"
@@ -53,77 +99,88 @@ export const CourseOverviewSection: React.FC<CourseOverviewSectionProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-3 mb-6">
           <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#53606A]">
             <Compass className="w-3.5 h-3.5 text-[#101722]" />
-            PERCURSO ACADÊMICO / INTRODUÇÃO E OBJETIVOS
+            APRESENTAÇÃO / OBJETIVOS E PERCURSO
           </span>
           <span className="px-2.5 py-1 rounded-[2px] bg-[#E3E6DE] border border-[#CBD0C8] text-[10px] font-extrabold uppercase tracking-[0.1em] text-[#101722]">
-            {STUDENT_PROFILE.semester}
+            06 ENCONTROS + ESTUDO NO AVA
           </span>
         </div>
 
         <TextReveal>
           <h2 className="text-3xl sm:text-5xl lg:text-[54px] font-black tracking-[-0.03em] leading-[1.04] text-[#101722] max-w-4xl">
-            Construindo uma bússola ética para a vida acadêmica e profissional
+            MEU PERCURSO NA DISCIPLINA.
           </h2>
         </TextReveal>
 
         <p className="mt-4 editorial-body text-[#53606A] max-w-3xl leading-relaxed">
-          A disciplina <strong className="text-[#101722]">Relações, Princípios e Valores</strong> conectou autoconhecimento, convivência, responsabilidade social e expressão criativa ao longo de cinco encontros presenciais.
+          Este portfólio reúne registros de{' '}
+          <strong className="text-[#101722]">
+            Relações, Princípios e Valores
+          </strong>
+          , na Unicatólica. Reflito sobre as experiências em sala, minhas
+          respostas e os estudos no AVA, relacionando a formação humana às
+          responsabilidades da Engenharia de Software.
         </p>
 
-        <motion.div
-          variants={staggerContainerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, amount: 0.2 }}
-          className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
-        >
-          {OVERVIEW_OBJECTIVES.map((obj) => (
-            <motion.div
-              key={obj.num}
-              variants={staggerItemVariants}
-              className="bg-[#E3E6DE]/85 border border-[#CBD0C8] p-5 rounded-[2px] flex flex-col justify-between hover:border-[#101722] transition-colors"
-            >
-              <div>
-                <span className="inline-block px-2 py-0.5 rounded-[2px] bg-[#101722] text-[#CAFA65] text-[11px] font-extrabold tracking-[0.08em]">
-                  {obj.num}
-                </span>
-                <h3 className="mt-4 text-lg font-extrabold tracking-[-0.01em] text-[#101722]">
-                  {obj.title}
-                </h3>
-                <p className="mt-2 text-sm text-[#53606A] leading-relaxed">
-                  {obj.description}
-                </p>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
+        <div className="mt-8">
+          <span className="block text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#53606A] mb-3">
+            QUATRO EIXOS DA DISCIPLINA
+          </span>
+          <motion.div
+            variants={staggerContainerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, amount: 0.2 }}
+            className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4"
+          >
+            {OVERVIEW_OBJECTIVES.map((obj) => (
+              <motion.div
+                key={obj.num}
+                variants={staggerItemVariants}
+                className="bg-[#E3E6DE]/85 border border-[#CBD0C8] p-5 rounded-[2px] flex flex-col justify-between hover:border-[#101722] transition-colors"
+              >
+                <div>
+                  <span className="inline-block px-2 py-0.5 rounded-[2px] bg-[#101722] text-[#CAFA65] text-[11px] font-extrabold tracking-[0.08em]">
+                    {obj.num}
+                  </span>
+                  <h3 className="mt-4 text-lg font-extrabold tracking-[-0.01em] text-[#101722]">
+                    {obj.title}
+                  </h3>
+                  <p className="mt-2 text-sm text-[#53606A] leading-relaxed">
+                    {obj.description}
+                  </p>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </div>
 
-        <div className="mt-10 bg-[#101722] text-[#F0F1EC] p-6 sm:p-8 rounded-[2px] border border-[#25313F]">
+        <div className="mt-8 bg-[#101722] text-[#F0F1EC] p-6 sm:p-8 rounded-[2px] border border-[#25313F]">
           <div className="flex flex-wrap items-center justify-between gap-2 mb-5">
             <span className="text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#CAFA65]">
-              LINHA DO TEMPO DOS 5 ENCONTROS
+              CRONOGRAMA · 06 ENCONTROS + ESTUDO NO AVA
             </span>
             <span className="text-[11px] text-[#A6AFBC]">
-              Clique em um encontro para navegar
+              Clique para navegar entre os registros
             </span>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-5 gap-3">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-7 gap-2.5">
             {OVERVIEW_ENCOUNTERS.map((item, idx) => (
               <button
-                key={item.targetId}
+                key={`${item.date}-${idx}`}
                 type="button"
                 onClick={() => onNavigate(item.targetId)}
-                className="group text-left bg-[#141D29] border border-[#25313F] hover:border-[#CAFA65] p-4 rounded-[2px] transition-all flex flex-col justify-between cursor-pointer"
+                className="group text-left bg-[#141D29] border border-[#25313F] hover:border-[#CAFA65] p-3.5 rounded-[2px] transition-all flex flex-col justify-between cursor-pointer"
               >
                 <div>
-                  <div className="flex items-center justify-between gap-2">
+                  <div className="flex items-center justify-between gap-1">
                     <span className="text-[10px] font-extrabold uppercase tracking-[0.1em] text-[#CAFA65]">
-                      0{idx + 1} · {item.date}
+                      {item.date}
                     </span>
-                    <ArrowRight className="w-3.5 h-3.5 text-[#A6AFBC] group-hover:text-[#CAFA65] group-hover:translate-x-0.5 transition-all" />
+                    <ArrowRight className="w-3 h-3 text-[#A6AFBC] group-hover:text-[#CAFA65] group-hover:translate-x-0.5 transition-all" />
                   </div>
-                  <p className="mt-2.5 text-xs sm:text-sm font-bold text-[#F0F1EC] leading-snug">
+                  <p className="mt-2 text-xs font-bold text-[#F0F1EC] leading-snug">
                     {item.title}
                   </p>
                 </div>
@@ -131,15 +188,65 @@ export const CourseOverviewSection: React.FC<CourseOverviewSectionProps> = ({
             ))}
           </div>
         </div>
+
+        {/* Bloco 05/07 — Aula Introdutória */}
+        <div className="mt-8 pt-8 border-t border-[#CBD0C8] grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+          <div className="lg:col-span-7 bg-[#E3E6DE]/85 border border-[#CBD0C8] p-6 sm:p-8 rounded-[2px]">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span className="inline-block px-2.5 py-1 rounded-[2px] bg-[#101722] text-[#CAFA65] text-[10px] font-extrabold uppercase tracking-[0.12em]">
+                05/07 AULA INTRODUTÓRIA
+              </span>
+              <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#53606A]">
+                Ausência justificada
+              </span>
+            </div>
+
+            <h3 className="text-2xl sm:text-3xl font-black tracking-[-0.02em] text-[#101722]">
+              O ponto de partida da trajetória.
+            </h3>
+
+            <p className="mt-4 text-sm sm:text-base text-[#101722]/90 leading-relaxed">
+              Não estive presente na primeira aula, por falta justificada. Por
+              isso, não apresento este encontro como uma vivência pessoal.
+              Conforme o registro disponível, houve a apresentação do professor
+              e da disciplina, organizada em quatro unidades, além da explicação
+              da metodologia de avaliação.
+            </p>
+
+            <p className="mt-3 text-sm sm:text-base text-[#101722]/90 leading-relaxed">
+              A avaliação prevê um portfólio com os acontecimentos de cada aula,
+              as dinâmicas, os aprendizados e as respostas aos questionamentos.
+              Entendo essa proposta como um exercício de autoria: registrar não
+              é apenas descrever atividades, mas reconhecer como elas
+              transformam minha maneira de pensar e agir.
+            </p>
+          </div>
+
+          <div className="lg:col-span-5">
+            <MediaSlotCard
+              encounter={introEncounterSlot}
+              uploadedMedia={mediaMap[INTRO_CLASS_MEDIA_SLOT.id] || null}
+              onUpload={onUpload}
+              onRemove={onRemove}
+              onOpenLightbox={onOpenLightbox}
+              onNavigate={onNavigate}
+            />
+          </div>
+        </div>
       </div>
 
-      <SectionFooter code="WDP / 02" theme="light" extraLeftTag="VISÃO GERAL" />
+      <SectionFooter
+        code="WDP / 02"
+        theme="light"
+        extraLeftTag="APRESENTAÇÃO E INTRODUÇÃO"
+      />
     </section>
   );
 };
 
 interface EncounterSectionProps {
   encounter: EncounterData;
+  mediaMap: Record<string, UploadedMedia>;
   uploadedMedia: UploadedMedia | null;
   onUpload: (encounterId: string, file: File) => void;
   onRemove: (encounterId: string, silent?: boolean) => void;
@@ -150,6 +257,7 @@ interface EncounterSectionProps {
 
 export const EncounterSection: React.FC<EncounterSectionProps> = ({
   encounter,
+  mediaMap,
   uploadedMedia,
   onUpload,
   onRemove,
@@ -158,6 +266,28 @@ export const EncounterSection: React.FC<EncounterSectionProps> = ({
   isPresentationMode,
 }) => {
   const isDark = encounter.theme === 'dark';
+
+  const secondaryEncounter = encounter.secondaryMediaSlot
+    ? buildVirtualEncounter(
+        encounter.secondaryMediaSlot,
+        encounter.code,
+        encounter.number,
+        encounter.theme,
+        encounter.secondaryMediaSlot.headerTag,
+        encounter.dateBadge
+      )
+    : null;
+
+  const avaEncounter = encounter.avaSection
+    ? buildVirtualEncounter(
+        encounter.avaSection.mediaSlot,
+        encounter.code,
+        'AVA',
+        encounter.theme,
+        encounter.avaSection.mediaSlot.headerTag,
+        '23 DE SETEMBRO · 2026'
+      )
+    : null;
 
   return (
     <section
@@ -192,6 +322,7 @@ export const EncounterSection: React.FC<EncounterSectionProps> = ({
           </span>
         </div>
 
+        {/* Bloco Principal do Encontro */}
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-start">
           <div className="lg:col-span-7 flex flex-col justify-between">
             <div>
@@ -261,7 +392,7 @@ export const EncounterSection: React.FC<EncounterSectionProps> = ({
                       }`}
                     />
                     <h3 className="text-[11px] font-extrabold uppercase tracking-[0.12em]">
-                      MINHAS PERCEPÇÕES E NOTAS
+                      {encounter.notesHeading || 'MINHAS ANOTAÇÕES'}
                     </h3>
                   </div>
                   <p
@@ -283,7 +414,7 @@ export const EncounterSection: React.FC<EncounterSectionProps> = ({
               }`}
             >
               <span className="block text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#CAFA65] mb-1">
-                SÍNTESE DO ENCONTRO {encounter.number}
+                O QUE LEVO · ENCONTRO {encounter.number}
               </span>
               <p className="text-sm sm:text-base font-semibold leading-snug">
                 {encounter.takeaway}
@@ -302,6 +433,135 @@ export const EncounterSection: React.FC<EncounterSectionProps> = ({
             />
           </div>
         </div>
+
+        {/* Cards Detalhados do Encontro */}
+        {encounter.detailCards && encounter.detailCards.length > 0 && (
+          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+            {encounter.detailCards.map((card, index) => (
+              <div
+                key={index}
+                className={`p-5 rounded-[2px] border flex flex-col justify-between ${
+                  isDark
+                    ? 'bg-[#141D29]/90 border-[#25313F]'
+                    : 'bg-[#E3E6DE]/80 border-[#CBD0C8]'
+                }`}
+              >
+                <div>
+                  <span
+                    className={`block text-[10px] font-extrabold uppercase tracking-[0.12em] mb-2 ${
+                      isDark ? 'text-[#CAFA65]' : 'text-[#101722]'
+                    }`}
+                  >
+                    {card.title}
+                  </span>
+
+                  {card.bullets && card.bullets.length > 0 && (
+                    <ul
+                      className={`mb-2.5 space-y-1 text-xs font-bold ${
+                        isDark ? 'text-[#F0F1EC]' : 'text-[#101722]'
+                      }`}
+                    >
+                      {card.bullets.map((b, i) => (
+                        <li key={i}>{b}</li>
+                      ))}
+                    </ul>
+                  )}
+
+                  <p
+                    className={`text-sm leading-relaxed ${
+                      isDark ? 'text-[#A6AFBC]' : 'text-[#53606A]'
+                    }`}
+                  >
+                    {card.body}
+                  </p>
+                </div>
+              </div>
+            ))}
+
+            {/* Slot Secundário de Mídia (ex: Relógio 12/07) */}
+            {secondaryEncounter && encounter.secondaryMediaSlot && (
+              <div className="md:col-span-2 lg:col-span-1">
+                <MediaSlotCard
+                  encounter={secondaryEncounter}
+                  uploadedMedia={
+                    mediaMap[encounter.secondaryMediaSlot.id] || null
+                  }
+                  onUpload={onUpload}
+                  onRemove={onRemove}
+                  onOpenLightbox={onOpenLightbox}
+                  onNavigate={onNavigate}
+                />
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Nota de Encerramento ou Referência Complementar */}
+        {(encounter.closingNote || encounter.extraReference) && (
+          <div
+            className={`mt-5 p-4 rounded-[2px] border text-xs sm:text-sm ${
+              isDark
+                ? 'bg-[#141D29]/60 border-[#25313F] text-[#A6AFBC]'
+                : 'bg-[#E3E6DE]/60 border-[#CBD0C8] text-[#53606A]'
+            }`}
+          >
+            {encounter.closingNote && <p>{encounter.closingNote}</p>}
+            {encounter.extraReference && (
+              <p className="italic">{encounter.extraReference}</p>
+            )}
+          </div>
+        )}
+
+        {/* Subseção 23/09 — Atividade de Leitura e Reflexão no AVA */}
+        {encounter.avaSection && avaEncounter && (
+          <div className="mt-10 pt-8 border-t border-[#25313F]">
+            <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
+              <span className="inline-flex items-center gap-2 px-2.5 py-1 rounded-[2px] bg-[#CAFA65] text-[#101722] text-[10px] font-black uppercase tracking-[0.12em]">
+                <FileText className="w-3.5 h-3.5" />
+                {encounter.avaSection.badgeTitle}
+              </span>
+            </div>
+
+            <h3 className="text-2xl sm:text-3xl font-black tracking-[-0.02em] text-[#F0F1EC]">
+              {encounter.avaSection.subtitle}
+            </h3>
+            <p className="mt-2 text-sm sm:text-base text-[#A6AFBC] max-w-4xl leading-relaxed">
+              {encounter.avaSection.intro}
+            </p>
+
+            <div className="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
+              {encounter.avaSection.questions.map((q) => (
+                <div
+                  key={q.num}
+                  className="bg-[#141D29] border border-[#25313F] p-5 rounded-[2px]"
+                >
+                  <span className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#CAFA65]">
+                    {q.num} / {q.title}
+                  </span>
+                  <p className="mt-1.5 text-xs sm:text-sm font-bold text-[#F0F1EC]">
+                    {q.question}
+                  </p>
+                  <p className="mt-2.5 text-sm text-[#A6AFBC] leading-relaxed">
+                    {q.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-6 max-w-xl">
+              <MediaSlotCard
+                encounter={avaEncounter}
+                uploadedMedia={
+                  mediaMap[encounter.avaSection.mediaSlot.id] || null
+                }
+                onUpload={onUpload}
+                onRemove={onRemove}
+                onOpenLightbox={onOpenLightbox}
+                onNavigate={onNavigate}
+              />
+            </div>
+          </div>
+        )}
       </div>
 
       <SectionFooter
@@ -333,7 +593,7 @@ export const SynthesisSection: React.FC<SynthesisSectionProps> = ({
         <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
           <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#CAFA65]">
             <Sparkles className="w-3.5 h-3.5" />
-            SÍNTESE DO PERCURSO / CONSOLIDAÇÃO
+            CONSIDERAÇÕES FINAIS / SÍNTESE PESSOAL
           </span>
           <span className="px-2.5 py-1 rounded-[2px] bg-[#141D29] border border-[#25313F] text-[10px] font-extrabold uppercase tracking-[0.1em] text-[#A6AFBC]">
             04 PILARES FORMATIVOS
@@ -342,26 +602,22 @@ export const SynthesisSection: React.FC<SynthesisSectionProps> = ({
 
         <TextReveal>
           <h2 className="text-3xl sm:text-5xl lg:text-[54px] font-black tracking-[-0.03em] leading-[1.04] max-w-4xl">
-            Principais aprendizados da jornada
+            O QUE ESSA TRAJETÓRIA ME ENSINOU.
           </h2>
         </TextReveal>
-
-        <p className="mt-4 editorial-body text-[#A6AFBC] max-w-3xl leading-relaxed">
-          O que permanece após os cinco encontros: princípios que orientam minhas relações, escolhas profissionais e trabalho em equipe na Engenharia de Software.
-        </p>
 
         <motion.div
           variants={staggerContainerVariants}
           initial="hidden"
           whileInView="visible"
           viewport={{ once: true, amount: 0.2 }}
-          className="mt-10 grid grid-cols-1 md:grid-cols-2 gap-5"
+          className="mt-10 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-5"
         >
           {SYNTHESIS_CARDS.map((card) => (
             <motion.div
               key={card.num}
               variants={staggerItemVariants}
-              className={`p-6 sm:p-8 rounded-[2px] border transition-colors ${
+              className={`p-6 sm:p-7 rounded-[2px] border transition-colors ${
                 card.featured
                   ? 'figma-grid-card border-[#CAFA65] shadow-[0_0_30px_rgba(202,250,101,0.08)]'
                   : 'bg-[#141D29] border-[#25313F] hover:border-[#34404D]'
@@ -384,7 +640,7 @@ export const SynthesisSection: React.FC<SynthesisSectionProps> = ({
                 )}
               </div>
 
-              <h3 className="mt-5 text-2xl sm:text-3xl font-black tracking-[-0.02em] text-[#F0F1EC]">
+              <h3 className="mt-5 text-2xl font-black tracking-[-0.02em] text-[#F0F1EC]">
                 {card.title}
               </h3>
               <p className="mt-3 text-sm sm:text-base text-[#A6AFBC] leading-relaxed">
@@ -393,9 +649,27 @@ export const SynthesisSection: React.FC<SynthesisSectionProps> = ({
             </motion.div>
           ))}
         </motion.div>
+
+        <div className="mt-8 bg-[#141D29] border border-[#25313F] p-6 sm:p-8 rounded-[2px]">
+          <p className="text-base sm:text-lg font-bold text-[#F0F1EC]">
+            Ser engenheiro de software vai além de dominar linguagens e
+            ferramentas.
+          </p>
+          <p className="mt-2.5 text-sm sm:text-base text-[#A6AFBC] leading-relaxed max-w-4xl">
+            Quero unir estudo contínuo, responsabilidade técnica e respeito às
+            pessoas. Levo desta trajetória o compromisso de testar minhas
+            soluções, comunicar riscos, considerar a acessibilidade desde o
+            início e colaborar com abertura ao diálogo. Minha formação se
+            constrói nas escolhas que faço todos os dias.
+          </p>
+        </div>
       </div>
 
-      <SectionFooter code="WDP / 08" theme="dark" extraLeftTag="APRENDIZADOS" />
+      <SectionFooter
+        code="WDP / 08"
+        theme="dark"
+        extraLeftTag="SÍNTESE PESSOAL"
+      />
     </section>
   );
 };
@@ -408,69 +682,6 @@ interface ParodyAppendixSectionProps {
   isPresentationMode: boolean;
 }
 
-const PARODY_VERSES = [
-  {
-    id: 'v1',
-    axis: 'vida-academica' as ParodyThemeId,
-    tag: 'ESTROFE 01 · VIDA ACADÊMICA',
-    title: 'Chegada e propósito na faculdade',
-    lines: [
-      'Entrei na sala com sonhos pra realizar,',
-      'Código na tela e muito pra caminhar.',
-      'Na UniCatólica aprendi a enxergar:',
-      'Não basta saber fazer, é preciso se importar.',
-    ],
-  },
-  {
-    id: 'refrao-1',
-    axis: 'refroes' as ParodyThemeId,
-    tag: 'REFRÃO PRINCIPAL',
-    title: 'O chamado da formação crítica',
-    lines: [
-      'Lê, lê, pra aprender,',
-      'Argumenta pra convencer!',
-      'Cria, inova, dá opinião,',
-      'Ética e valores na profissão!',
-    ],
-  },
-  {
-    id: 'v2',
-    axis: 'percepcao-argumentacao' as ParodyThemeId,
-    tag: 'ESTROFE 02 · PERCEPÇÃO E ARGUMENTAÇÃO',
-    title: 'Escuta ativa e olhar crítico',
-    lines: [
-      'Cada encontro trouxe uma nova visão,',
-      'Ouvir o outro amplia a razão.',
-      'Com argumento firme e respeito no olhar,',
-      'Construo escolhas prontas pra transformar.',
-    ],
-  },
-  {
-    id: 'v3',
-    axis: 'autoria-inovacao' as ParodyThemeId,
-    tag: 'ESTROFE 03 · AUTORIA E INOVAÇÃO',
-    title: 'Protagonismo e criação em equipe',
-    lines: [
-      'Sair da zona de conforto faz crescer,',
-      'Unir talentos multiplica o saber.',
-      'Na autoria nasce a inovação,',
-      'Com compromisso, ética e cooperação.',
-    ],
-  },
-  {
-    id: 'v4',
-    axis: 'leitura-escrita-oralidade' as ParodyThemeId,
-    tag: 'ESTROFE 04 · LEITURA, ESCRITA E ORALIDADE',
-    title: 'Expressão que conecta ideias e pessoas',
-    lines: [
-      'Da leitura atenta à escrita com clareza,',
-      'Na oralidade a ideia ganha firmeza.',
-      'Comunicar valores é construir ponte,',
-      'Levando princípios além do horizonte.',
-    ],
-  },
-];
-
 export const ParodyAppendixSection: React.FC<ParodyAppendixSectionProps> = ({
   slideId,
   activeTheme,
@@ -479,10 +690,10 @@ export const ParodyAppendixSection: React.FC<ParodyAppendixSectionProps> = ({
   isPresentationMode,
 }) => {
   if (slideId === 'wdp-09') {
-    const filteredVerses =
+    const blocks =
       activeTheme === 'all'
-        ? PARODY_VERSES
-        : PARODY_VERSES.filter((v) => v.axis === activeTheme);
+        ? PARODY_FULL_LYRICS.page01
+        : PARODY_FULL_LYRICS.page01.filter((b) => b.axis === activeTheme);
 
     return (
       <section
@@ -494,10 +705,10 @@ export const ParodyAppendixSection: React.FC<ParodyAppendixSectionProps> = ({
         }`}
       >
         <div className="max-w-[1360px] w-full mx-auto">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#53606A]">
               <Music className="w-3.5 h-3.5 text-[#101722]" />
-              APÊNDICE CRIATIVO / PARÓDIA — LETRA E REFRÕES
+              APÊNDICE / PRODUÇÃO DO GRUPO 04/11 · LETRA COMPLETA 1 DE 3
             </span>
             <button
               type="button"
@@ -509,15 +720,19 @@ export const ParodyAppendixSection: React.FC<ParodyAppendixSectionProps> = ({
           </div>
 
           <TextReveal>
-            <h2 className="text-3xl sm:text-5xl font-black tracking-[-0.03em] leading-[1.05] max-w-4xl">
-              Paródia: síntese cantada da disciplina
+            <h2 className="text-3xl sm:text-5xl font-black tracking-[-0.03em] leading-[1.05]">
+              NOSSA PARÓDIA / 01
             </h2>
           </TextReveal>
+          <p className="mt-2 text-sm sm:text-base font-medium text-[#53606A]">
+            Letra apresentada em sala, a partir de &ldquo;Ela é amiga da minha
+            mulher&rdquo;.
+          </p>
 
-          <div className="mt-6 flex flex-wrap items-center gap-2">
+          <div className="mt-5 flex flex-wrap items-center gap-2">
             <span className="inline-flex items-center gap-1.5 text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#53606A] mr-1">
               <Filter className="w-3 h-3" />
-              Filtrar por eixo:
+              Filtrar estrofes:
             </span>
             {PARODY_FILTERS.map((f) => {
               const selected = activeTheme === f.id;
@@ -538,63 +753,51 @@ export const ParodyAppendixSection: React.FC<ParodyAppendixSectionProps> = ({
             })}
           </div>
 
-          <div className="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {filteredVerses.map((v) => {
-              const isChorus = v.axis === 'refroes';
-              return (
-                <div
-                  key={v.id}
-                  className={`p-6 rounded-[2px] border flex flex-col justify-between ${
-                    isChorus
-                      ? 'bg-[#101722] text-[#F0F1EC] border-[#101722]'
-                      : 'bg-[#E3E6DE]/90 text-[#101722] border-[#CBD0C8]'
-                  }`}
-                >
-                  <div>
-                    <span
-                      className={`inline-block text-[10px] font-extrabold uppercase tracking-[0.12em] ${
-                        isChorus ? 'text-[#CAFA65]' : 'text-[#53606A]'
-                      }`}
-                    >
-                      {v.tag}
-                    </span>
-                    <h3 className="mt-2 text-lg font-extrabold">{v.title}</h3>
-                    <div className="mt-4 space-y-1.5 font-medium text-sm sm:text-base leading-relaxed">
-                      {v.lines.map((line, i) => (
-                        <p key={i}>{line}</p>
-                      ))}
-                    </div>
+          <div className="mt-7 grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {blocks.map((block) => (
+              <div
+                key={block.id}
+                className={`p-6 rounded-[2px] border flex flex-col justify-between ${
+                  block.isChorus
+                    ? 'bg-[#101722] text-[#F0F1EC] border-[#101722]'
+                    : 'bg-[#E3E6DE]/90 text-[#101722] border-[#CBD0C8]'
+                }`}
+              >
+                <div>
+                  <span
+                    className={`inline-block text-[10px] font-extrabold uppercase tracking-[0.12em] ${
+                      block.isChorus ? 'text-[#CAFA65]' : 'text-[#53606A]'
+                    }`}
+                  >
+                    {block.tag}
+                  </span>
+                  <div className="mt-4 space-y-1 font-medium text-sm sm:text-base leading-relaxed">
+                    {block.lines.map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
                   </div>
                 </div>
-              );
-            })}
+
+                {block.highlightNote && (
+                  <div className="mt-6 pt-3 border-t border-[#CBD0C8] text-xs font-bold text-[#101722]">
+                    {block.highlightNote}
+                  </div>
+                )}
+              </div>
+            ))}
           </div>
         </div>
 
-        <SectionFooter code="WDP / 09" theme="light" extraLeftTag="PARÓDIA · LETRA" />
+        <SectionFooter
+          code="WDP / 09"
+          theme="light"
+          extraLeftTag="LETRA COMPLETA 1 DE 3"
+        />
       </section>
     );
   }
 
   if (slideId === 'wdp-10') {
-    const competencies = [
-      {
-        code: 'EIXO 01',
-        title: 'Percepção e Argumentação',
-        desc: 'Capacidade de ler contextos humanos, identificar dilemas éticos e sustentar posicionamentos fundamentados com respeito ao contraditório.',
-      },
-      {
-        code: 'EIXO 02',
-        title: 'Autoria e Inovação',
-        desc: 'Transformar repertório teórico em produção original — unindo criatividade artística, colaboração em grupo e resolução de problemas.',
-      },
-      {
-        code: 'EIXO 03',
-        title: 'Leitura, Escrita e Oralidade',
-        desc: 'Articular reflexão escrita e expressão oral diante da turma, vencendo a timidez e comunicando ideias com clareza e propósito.',
-      },
-    ];
-
     return (
       <section
         id="wdp-10"
@@ -605,53 +808,55 @@ export const ParodyAppendixSection: React.FC<ParodyAppendixSectionProps> = ({
         }`}
       >
         <div className="max-w-[1360px] w-full mx-auto">
-          <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
+          <div className="flex flex-wrap items-center justify-between gap-3 mb-4">
             <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#CAFA65]">
-              <Disc className="w-3.5 h-3.5" />
-              APÊNDICE CRIATIVO / EIXOS FORMATIVOS DA PARÓDIA
-            </span>
-            <span className="px-2.5 py-1 rounded-[2px] bg-[#141D29] border border-[#25313F] text-[10px] font-extrabold uppercase tracking-[0.1em] text-[#A6AFBC]">
-              COMPETÊNCIAS MOBILIZADAS
+              <Music className="w-3.5 h-3.5" />
+              APÊNDICE / PRODUÇÃO DO GRUPO 04/11 · LETRA COMPLETA 2 DE 3
             </span>
           </div>
 
           <TextReveal>
-            <h2 className="text-3xl sm:text-5xl font-black tracking-[-0.03em] leading-[1.05] max-w-4xl">
-              Análise dos eixos expressos na composição
+            <h2 className="text-3xl sm:text-5xl font-black tracking-[-0.03em] leading-[1.05]">
+              NOSSA PARÓDIA / 02
             </h2>
           </TextReveal>
-
-          <p className="mt-4 editorial-body text-[#A6AFBC] max-w-3xl leading-relaxed">
-            Mais do que um exercício musical, a construção coletiva da paródia consolidou competências comunicativas e éticas essenciais à formação superior.
+          <p className="mt-2 text-sm sm:text-base font-medium text-[#A6AFBC]">
+            Percepção e argumentação · Autoria e inovação · Leitura, escrita e
+            oralidade
           </p>
 
-          <div className="mt-10 grid grid-cols-1 lg:grid-cols-3 gap-5">
-            {competencies.map((item) => (
+          <div className="mt-7 grid grid-cols-1 lg:grid-cols-3 gap-5">
+            {PARODY_FULL_LYRICS.page02.map((block) => (
               <div
-                key={item.code}
-                className="figma-grid-card p-6 sm:p-8 rounded-[2px] border border-[#25313F] flex flex-col justify-between"
+                key={block.id}
+                className="figma-grid-card p-6 rounded-[2px] border border-[#25313F] flex flex-col justify-between"
               >
                 <div>
-                  <span className="inline-block px-2.5 py-1 rounded-[2px] bg-[#CAFA65] text-[#101722] text-[10px] font-black uppercase tracking-[0.12em]">
-                    {item.code}
+                  <span className="inline-block text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#CAFA65]">
+                    {block.tag}
                   </span>
-                  <h3 className="mt-5 text-2xl font-black tracking-[-0.02em] text-[#F0F1EC]">
-                    {item.title}
-                  </h3>
-                  <p className="mt-3 text-sm sm:text-base text-[#A6AFBC] leading-relaxed">
-                    {item.desc}
-                  </p>
+                  <div className="mt-4 space-y-1 font-medium text-sm sm:text-base text-[#F0F1EC]/95 leading-relaxed">
+                    {block.lines.map((line, i) => (
+                      <p key={i}>{line}</p>
+                    ))}
+                  </div>
                 </div>
-                <div className="mt-6 pt-4 border-t border-[#25313F]/80 flex items-center gap-2 text-xs font-bold text-[#CAFA65]">
-                  <CheckCircle2 className="w-4 h-4" />
-                  <span>Aplicado na apresentação em grupo</span>
-                </div>
+
+                {block.highlightNote && (
+                  <div className="mt-6 pt-3 border-t border-[#25313F] text-xs font-bold text-[#CAFA65]">
+                    {block.highlightNote}
+                  </div>
+                )}
               </div>
             ))}
           </div>
         </div>
 
-        <SectionFooter code="WDP / 10" theme="dark" extraLeftTag="PARÓDIA · EIXOS" />
+        <SectionFooter
+          code="WDP / 10"
+          theme="dark"
+          extraLeftTag="LETRA COMPLETA 2 DE 3"
+        />
       </section>
     );
   }
@@ -666,68 +871,80 @@ export const ParodyAppendixSection: React.FC<ParodyAppendixSectionProps> = ({
       }`}
     >
       <div className="max-w-[1360px] w-full mx-auto">
-        <span className="inline-block text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#CAFA65] mb-5">
-          ENCERRAMENTO / SÍNTESE FINAL
+        <span className="inline-flex items-center gap-2 text-[11px] font-extrabold uppercase tracking-[0.14em] text-[#CAFA65] mb-4">
+          <Music className="w-3.5 h-3.5" />
+          APÊNDICE / PRODUÇÃO DO GRUPO 04/11 · LETRA COMPLETA 3 DE 3
         </span>
 
         <TextReveal>
-          <h2 className="text-3xl sm:text-5xl lg:text-[56px] font-black tracking-[-0.03em] leading-[1.04] max-w-4xl">
-            Técnica com consciência, valores e propósito
+          <h2 className="text-3xl sm:text-5xl font-black tracking-[-0.03em] leading-[1.05]">
+            NOSSA PARÓDIA / 03
           </h2>
         </TextReveal>
-
-        <p className="mt-5 editorial-body text-[#A6AFBC] max-w-3xl leading-relaxed">
-          Concluo a disciplina <strong className="text-[#F0F1EC]">Relações, Princípios e Valores</strong> com a convicção de que desenvolver software de excelência começa por cultivar relações éticas, escuta genuína e compromisso humano.
+        <p className="mt-2 text-sm sm:text-base font-medium text-[#A6AFBC]">
+          Encerramento da letra · participação de todo o grupo
         </p>
 
-        <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 bg-[#141D29] border border-[#25313F] p-6 sm:p-8 rounded-[2px]">
-          <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#A6AFBC]">
-              DISCENTE
-            </span>
-            <p className="mt-1 text-sm font-bold text-[#F0F1EC]">
-              {STUDENT_PROFILE.defaultName}
-            </p>
-          </div>
-          <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#A6AFBC]">
-              MATRÍCULA
-            </span>
-            <p className="mt-1 text-sm font-bold text-[#CAFA65]">
-              {STUDENT_PROFILE.registration}
-            </p>
-          </div>
-          <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#A6AFBC]">
-              DOCENTE
-            </span>
-            <p className="mt-1 text-sm font-bold text-[#F0F1EC]">
-              Prof. {STUDENT_PROFILE.professor}
-            </p>
-          </div>
-          <div>
-            <span className="text-[10px] font-extrabold uppercase tracking-[0.12em] text-[#A6AFBC]">
-              INSTITUIÇÃO
-            </span>
-            <p className="mt-1 text-sm font-bold text-[#F0F1EC]">
-              {STUDENT_PROFILE.institution}
-            </p>
-          </div>
-        </div>
+        <div className="mt-7 grid grid-cols-1 lg:grid-cols-12 gap-5">
+          {PARODY_FULL_LYRICS.page03.map((block, idx) => (
+            <div
+              key={block.id}
+              className={`${
+                idx === 0 ? 'lg:col-span-5' : 'lg:col-span-4'
+              } p-6 rounded-[2px] border flex flex-col justify-between ${
+                block.isChorus
+                  ? 'bg-[#CAFA65] text-[#101722] border-[#CAFA65]'
+                  : 'bg-[#141D29] text-[#F0F1EC] border-[#25313F]'
+              }`}
+            >
+              <div>
+                <span
+                  className={`inline-block text-[10px] font-extrabold uppercase tracking-[0.12em] ${
+                    block.isChorus ? 'text-[#101722]' : 'text-[#CAFA65]'
+                  }`}
+                >
+                  {block.tag}
+                </span>
+                <div className="mt-4 space-y-1 font-semibold text-sm sm:text-base leading-relaxed">
+                  {block.lines.map((line, i) => (
+                    <p key={i}>{line}</p>
+                  ))}
+                </div>
+              </div>
+            </div>
+          ))}
 
-        <div className="mt-8">
-          <button
-            type="button"
-            onClick={() => onNavigate('wdp-01')}
-            className="inline-flex items-center gap-2 px-5 py-3 rounded-[2px] bg-[#CAFA65] text-[#101722] text-xs font-black uppercase tracking-[0.1em] hover:brightness-95 transition-all cursor-pointer"
-          >
-            <span>Voltar ao início do portfólio</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
+          <div className="lg:col-span-3 bg-[#141D29] border border-[#25313F] p-6 rounded-[2px] flex flex-col justify-between">
+            <div>
+              <span className="text-[10px] font-extrabold uppercase tracking-[0.14em] text-[#CAFA65]">
+                SÍNTESE FINAL
+              </span>
+              <h3 className="mt-3 text-2xl font-black tracking-[-0.02em] text-[#F0F1EC]">
+                CRIAR. COLABORAR. APRESENTAR.
+              </h3>
+              <p className="mt-3 text-sm text-[#A6AFBC] leading-relaxed">
+                Uma vivência que reuniu criatividade, trabalho em equipe e
+                expressão oral.
+              </p>
+            </div>
+
+            <button
+              type="button"
+              onClick={() => onNavigate('wdp-01')}
+              className="mt-6 inline-flex items-center justify-center gap-2 px-4 py-3 rounded-[2px] bg-[#CAFA65] text-[#101722] text-xs font-black uppercase tracking-[0.1em] hover:brightness-95 transition-all cursor-pointer"
+            >
+              <span>Voltar ao início</span>
+              <ArrowRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       </div>
 
-      <SectionFooter code="WDP / 11" theme="dark" extraLeftTag="ENCERRAMENTO" />
+      <SectionFooter
+        code="WDP / 11"
+        theme="dark"
+        extraLeftTag="LETRA COMPLETA 3 DE 3"
+      />
     </section>
   );
 };
