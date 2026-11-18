@@ -457,6 +457,10 @@ export default function App() {
 
         {shouldRenderSlide('wdp-02') && (
           <CourseOverviewSection
+            mediaMap={mediaMap}
+            onUpload={handleMediaUpload}
+            onRemove={handleMediaRemove}
+            onOpenLightbox={handleOpenEncounterLightbox}
             onNavigate={navigateToSection}
             isPresentationMode={isPresentationMode}
           />
@@ -468,6 +472,7 @@ export default function App() {
               <EncounterSection
                 key={enc.id}
                 encounter={enc}
+                mediaMap={mediaMap}
                 uploadedMedia={mediaMap[enc.id] || enc.defaultMedia || null}
                 onUpload={handleMediaUpload}
                 onRemove={handleMediaRemove}
