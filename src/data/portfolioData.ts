@@ -11,7 +11,7 @@ export const STUDENT_PROFILE = {
   professor: 'Antônio Cesar',
   institution: 'UNICATÓLICA / ENGENHARIA DE SOFTWARE',
   semester: '2º SEMESTRE - 2026',
-  coverPhotoPath: '',
+  coverPhotoPath: '/media/capa.jpg',
 };
 
 export const SLIDES_META: SlideMeta[] = [
@@ -69,6 +69,11 @@ export const INTRO_CLASS_MEDIA_SLOT: SecondaryMediaConfig = {
     'Material introdutório ou registro cedido pelo professor ou por colegas, com identificação da origem.',
   subCaption:
     'Não corresponde a uma fotografia da minha presença neste encontro.',
+  defaultMedia: {
+    url: '/media/encontro - 05.07.jpeg',
+    type: 'image',
+    fileName: 'encontro - 05.07.jpeg',
+  },
 };
 
 export const ENCOUNTERS_DATA: EncounterData[] = [
@@ -121,6 +126,11 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
       caption:
         'Detalhe do relógio recebido no aniversário de 20 anos ou trecho da apresentação do objeto.',
       subCaption: 'Objeto simbólico de felicidade apresentado em sala',
+      defaultMedia: {
+        url: '/media/objeto-memoria_afetiva.JPEG',
+        type: 'image',
+        fileName: 'objeto-memoria_afetiva.JPEG',
+      },
     },
   },
   {
@@ -143,6 +153,11 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
     visualSubCaption: '26/08 / Escolhas, competências e sentido da formação',
     takeaway:
       'Quero construir uma carreira competente sem perder de vista o sentido da vida que desejo.',
+    defaultMedia: {
+      url: '/media/encontro - 26.08.png',
+      type: 'image',
+      fileName: 'encontro - 26.08.png',
+    },
     detailCards: [
       {
         title: 'CASOS EMPRESARIAIS / ESCOLHER PARCERIAS',
@@ -193,6 +208,11 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
       '09/09 / Preservar a privacidade dos relatos compartilhados',
     takeaway:
       'Não basta evitar uma punição: preciso compreender e assumir as consequências do que faço.',
+    defaultMedia: {
+      url: '/media/encontro - 09.09.png',
+      type: 'image',
+      fileName: 'encontro - 09.09.png',
+    },
     detailCards: [
       {
         title: 'PERGUNTAS EM DUPLAS / MORAL',
@@ -275,6 +295,11 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
         placeholderTitle: '[INSERIR FOTO OU VÍDEO DA AULA]',
         caption:
           'Captura dos materiais ou da atividade no AVA, sem expor dados pessoais de colegas.',
+        defaultMedia: {
+          url: '/media/encontro- 23.09.jpeg',
+          type: 'image',
+          fileName: 'encontro- 23.09.jpeg',
+        },
       },
     },
   },
@@ -298,6 +323,11 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
     visualSubCaption: '21/10 / Da identificação de capacidades à produção em grupo',
     takeaway:
       'Uma equipe se fortalece quando diferenças se tornam colaboração, não hierarquia de valor.',
+    defaultMedia: {
+      url: '/media/encontro - 21.10.png',
+      type: 'image',
+      fileName: 'encontro - 21.10.png',
+    },
     detailCards: [
       {
         title: 'LEITURA, CRIAÇÃO E EXPRESSÃO / OS PAPÉIS',
@@ -342,6 +372,11 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
     linkToAppendix: true,
     takeaway:
       'Aprendi que criar, colaborar e apresentar são práticas que se fortalecem quando exercitadas.',
+    defaultMedia: {
+      url: '/media/encontro - 04.11.png',
+      type: 'image',
+      fileName: 'encontro - 04.11.png',
+    },
     detailCards: [
       {
         title: 'O RESULTADO / DUAS DAS QUATRO JURADAS',
