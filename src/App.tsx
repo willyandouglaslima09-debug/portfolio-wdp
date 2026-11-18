@@ -16,6 +16,7 @@ import type {
 } from './types/portfolio';
 import {
   ENCOUNTERS_DATA,
+  INTRO_CLASS_MEDIA_SLOT,
   SLIDES_META,
   STUDENT_PROFILE,
 } from './data/portfolioData';
@@ -61,11 +62,24 @@ export default function App() {
 
   const [mediaMap, setMediaMap] = useState<Record<string, UploadedMedia>>(() => {
     const initial: Record<string, UploadedMedia> = {};
+
+    if (INTRO_CLASS_MEDIA_SLOT.defaultMedia) {
+      initial[INTRO_CLASS_MEDIA_SLOT.id] = INTRO_CLASS_MEDIA_SLOT.defaultMedia;
+    }
+
     ENCOUNTERS_DATA.forEach((enc) => {
       if (enc.defaultMedia) {
         initial[enc.id] = enc.defaultMedia;
       }
+      if (enc.secondaryMediaSlot?.defaultMedia) {
+        initial[enc.secondaryMediaSlot.id] = enc.secondaryMediaSlot.defaultMedia;
+      }
+      if (enc.avaSection?.mediaSlot.defaultMedia) {
+        initial[enc.avaSection.mediaSlot.id] =
+          enc.avaSection.mediaSlot.defaultMedia;
+      }
     });
+
     try {
       const raw = localStorage.getItem(STORAGE_MEDIA_KEY);
       if (raw) {
