@@ -34,6 +34,7 @@ export interface SecondaryMediaConfig {
   placeholderTitle: string;
   caption: string;
   subCaption?: string;
+  defaultMedia?: UploadedMedia;
 }
 
 export interface AvaQuestionItem {
