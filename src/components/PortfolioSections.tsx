@@ -82,8 +82,8 @@ export const CourseOverviewSection: React.FC<CourseOverviewSectionProps> = ({
     'WDP / 02',
     '00',
     'light',
-    '05/07 · AULA INTRODUTÓRIA',
-    '05 DE JULHO · 2026'
+    '05/08 · AULA INTRODUTÓRIA',
+    '05 DE AGOSTO · 2026'
   );
 
   return (
