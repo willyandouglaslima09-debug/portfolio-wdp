@@ -16,7 +16,7 @@ export const STUDENT_PROFILE = {
 
 export const SLIDES_META: SlideMeta[] = [
   { id: 'wdp-01', code: 'WDP / 01', shortLabel: '01 Capa', fullTitle: '01 · Capa', theme: 'dark' },
-  { id: 'wdp-02', code: 'WDP / 02', shortLabel: '02 Percurso & 05/07', fullTitle: '02 · Apresentação, objetivos e aula 05/07', theme: 'light' },
+  { id: 'wdp-02', code: 'WDP / 02', shortLabel: '02 Percurso & 05/08', fullTitle: '02 · Apresentação, objetivos e aula 05/08', theme: 'light' },
   { id: 'wdp-03', code: 'WDP / 03', shortLabel: '03 Encontro 1 (12/08)', fullTitle: '03 · Encontro 1 — Integração, identidade e vínculos', theme: 'dark' },
   { id: 'wdp-04', code: 'WDP / 04', shortLabel: '04 Encontro 2 (26/08)', fullTitle: '04 · Encontro 2 — Competências, escolhas e felicidade', theme: 'light' },
   { id: 'wdp-05', code: 'WDP / 05', shortLabel: '05 Encontro 3 & AVA', fullTitle: '05 · Encontro 3 (09/09) — Ética, moral e AVA (23/09)', theme: 'dark' },
@@ -52,7 +52,7 @@ export const OVERVIEW_OBJECTIVES = [
 ];
 
 export const OVERVIEW_ENCOUNTERS = [
-  { date: '05/07', title: 'Introdução · ausência justificada', targetId: 'wdp-02' },
+  { date: '05/08', title: 'Introdução · ausência justificada', targetId: 'wdp-02' },
   { date: '12/08', title: 'Integração, identidade e vínculos', targetId: 'wdp-03' },
   { date: '26/08', title: 'Competências, escolhas e felicidade', targetId: 'wdp-04' },
   { date: '09/09', title: 'Gincana da Ética e Moral', targetId: 'wdp-05' },
@@ -63,7 +63,7 @@ export const OVERVIEW_ENCOUNTERS = [
 
 export const INTRO_CLASS_MEDIA_SLOT: SecondaryMediaConfig = {
   id: 'wdp-02-intro',
-  headerTag: 'REGISTRO VISUAL / 05.07',
+  headerTag: '05/08',
   placeholderTitle: '[INSERIR FOTO OU VÍDEO DA AULA]',
   caption:
     'Material introdutório ou registro cedido pelo professor ou por colegas, com identificação da origem.',
