@@ -189,12 +189,12 @@ export const CourseOverviewSection: React.FC<CourseOverviewSectionProps> = ({
           </div>
         </div>
 
-        {/* Bloco 05/07 — Aula Introdutória */}
+        {/* Bloco 05/08 — Aula Introdutória */}
         <div className="mt-8 pt-8 border-t border-[#CBD0C8] grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
           <div className="lg:col-span-7 bg-[#E3E6DE]/85 border border-[#CBD0C8] p-6 sm:p-8 rounded-[2px]">
             <div className="flex flex-wrap items-center justify-between gap-2 mb-3">
               <span className="inline-block px-2.5 py-1 rounded-[2px] bg-[#101722] text-[#CAFA65] text-[10px] font-extrabold uppercase tracking-[0.12em]">
-                05/07 AULA INTRODUTÓRIA
+                05/08 AULA INTRODUTÓRIA
               </span>
               <span className="text-[11px] font-bold uppercase tracking-[0.08em] text-[#53606A]">
                 Ausência justificada
