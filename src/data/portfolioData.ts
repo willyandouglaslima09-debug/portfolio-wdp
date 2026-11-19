@@ -17,7 +17,7 @@ export const STUDENT_PROFILE = {
 export const SLIDES_META: SlideMeta[] = [
   { id: 'wdp-01', code: 'WDP / 01', shortLabel: '01 Capa', fullTitle: '01 · Capa', theme: 'dark' },
   { id: 'wdp-02', code: 'WDP / 02', shortLabel: '02 Percurso & 05/07', fullTitle: '02 · Apresentação, objetivos e aula 05/07', theme: 'light' },
-  { id: 'wdp-03', code: 'WDP / 03', shortLabel: '03 Encontro 1 (12/07)', fullTitle: '03 · Encontro 1 — Integração, identidade e vínculos', theme: 'dark' },
+  { id: 'wdp-03', code: 'WDP / 03', shortLabel: '03 Encontro 1 (12/08)', fullTitle: '03 · Encontro 1 — Integração, identidade e vínculos', theme: 'dark' },
   { id: 'wdp-04', code: 'WDP / 04', shortLabel: '04 Encontro 2 (26/08)', fullTitle: '04 · Encontro 2 — Competências, escolhas e felicidade', theme: 'light' },
   { id: 'wdp-05', code: 'WDP / 05', shortLabel: '05 Encontro 3 & AVA', fullTitle: '05 · Encontro 3 (09/09) — Ética, moral e AVA (23/09)', theme: 'dark' },
   { id: 'wdp-06', code: 'WDP / 06', shortLabel: '06 Encontro 4 (21/10)', fullTitle: '06 · Encontro 4 — Competências e formação de equipes', theme: 'light' },
@@ -53,7 +53,7 @@ export const OVERVIEW_OBJECTIVES = [
 
 export const OVERVIEW_ENCOUNTERS = [
   { date: '05/07', title: 'Introdução · ausência justificada', targetId: 'wdp-02' },
-  { date: '12/07', title: 'Integração, identidade e vínculos', targetId: 'wdp-03' },
+  { date: '12/08', title: 'Integração, identidade e vínculos', targetId: 'wdp-03' },
   { date: '26/08', title: 'Competências, escolhas e felicidade', targetId: 'wdp-04' },
   { date: '09/09', title: 'Gincana da Ética e Moral', targetId: 'wdp-05' },
   { date: '23/09', title: 'AVA · responsabilidade profissional', targetId: 'wdp-05' },
@@ -83,8 +83,8 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
     number: '01',
     theme: 'dark',
     kicker: 'ENCONTRO 01 / REGISTRO DE AULA',
-    dateBadge: '12 DE JULHO · 2026',
-    visualDate: '12/07',
+    dateBadge: '12 DE AGOSTO · 2026',
+    visualDate: '12/08',
     title: 'INTEGRAÇÃO, IDENTIDADE E VÍNCULOS.',
     subtitle: 'Conexão interpessoal, autoconhecimento e valoração',
     classroomHappened:
@@ -94,7 +94,7 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
       'A dinâmica aproximou colegas e mostrou que conhecer o outro também exige me apresentar com sinceridade. No percurso de integração, refleti sobre amizades, felicidade e um objeto de valor pessoal. Essas respostas revelam prioridades que desejo preservar na vida universitária e profissional.',
     visualPlaceholderTitle: '[INSERIR FOTO OU VÍDEO DA AULA]',
     visualCaption: 'Foto com os amigos e das mãos numeradas de 1 a 6.',
-    visualSubCaption: '12/07 / Integração e formação dos grupos',
+    visualSubCaption: '12/08 / Integração e formação dos grupos',
     takeaway:
       'Escutar, organizar e comunicar com respeito também são competências de engenharia.',
     defaultMedia: {
