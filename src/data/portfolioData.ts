@@ -97,6 +97,11 @@ export const ENCOUNTERS_DATA: EncounterData[] = [
     visualSubCaption: '12/07 / Integração e formação dos grupos',
     takeaway:
       'Escutar, organizar e comunicar com respeito também são competências de engenharia.',
+    defaultMedia: {
+      url: '/media/encontro - 12.07.jpeg',
+      type: 'image',
+      fileName: 'encontro - 12.07.jpeg',
+    },
     detailCards: [
       {
         title: 'PONTOS FORTES E ASPECTO A DESENVOLVER',
@@ -529,7 +534,7 @@ export const PARODY_FULL_LYRICS = {
         'E saber argumentar!',
         'Se fosse só dar opinião tava tudo certo,',
         'Mas tem que saber justificar!',
-        'Se fosse só falar qualquer coisa tava certo,',
+        'Se fosse só falar qualquer coisa tava tudo certo,',
         'Tem que ter argumento pra convencer!',
       ],
     },
@@ -543,7 +548,7 @@ export const PARODY_FULL_LYRICS = {
       lines: [
         'Se fosse só copiar tava tudo certo,',
         'Mas tem que criar e imaginar!',
-        'Se fosse só seguir o modelo tava certo,',
+        'Se fosse só seguir o modelo tava tudo certo,',
         'Mas tem que ter ideia pra inovar!',
         'Tem que criar, tem que inventar,',
         'Uma ideia original apresentar!',
